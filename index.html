@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+
+    <title>Arduino Aquarium Controller</title>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="jumbotron">
+            <h1 class="display-4">Arduino Relay Controller</h1>
+            <p class="lead"><b>Time:</b> 14:30 (Last update: 16/01/2019)</p>
+            <p class="lead"><b>Temperature:</b> 26.7 C</p>
+            <hr class="my-4">
+            <p>Do your changes and don't forget save it.</p>
+            <a class="btn btn-primary btn-lg" href="#" role="button">Save changes</a>
+        </div>
+
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-global" role="tab"
+                    aria-controls="nav-home" aria-selected="true">Global Setup</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-relay" role="tab"
+                    aria-controls="nav-profile" aria-selected="false">Relays Setup</a>
+
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab"
+                    aria-controls="nav-contact" aria-selected="false">Contact</a>
+            </div>
+        </nav>
+
+        <form>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-global" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <br />
+                    <h4>Temperature Sensor</h4>
+
+                    <div class="form-group col-md-2">
+                        <label for="temperatureSensorPort">IO Port Number:</label>
+                        <input type="text" class="form-control" id="temperatureSensorPort" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="temperatureSetpoint">Setpoint:</label>
+                        <input type="text" class="form-control" id="temperatureSetpoint" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="temperatureHighDiference">High diference:</label>
+                        <input type="text" class="form-control" id="temperatureHighDiference" />
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="temperatureLowDiference">Low diference:</label>
+                        <input type="text" class="form-control" id="temperatureLowDiference" />
+                    </div>
+
+                    <h4>Dosing Pump</h4>
+                    <div class="form-group col-md-3">
+                        <label for="dosingPumpCalibration">Calibration (ML/Minute):</label>
+                        <input type="text" class="form-control" id="dosingPumpCalibration" />
+                    </div>
+
+                    <h4>Notification Service*</h4>
+                    <div class="form-group col-md-6">
+                        <label for="notificationURL">URL:</label>
+                        <input type="text" class="form-control" id="notificationURL" />
+                    </div>
+                    * It will send a GET request with the parameters:
+                    ?code=(deviceCode)&temperature=(actualTemperature)<br />
+                </div>
+
+                <div class="tab-pane fade" id="nav-relay" role="tabpanel" aria-labelledby="nav-profile-tab">
+                    <br />
+                    <div class="form-group col-md-2">
+                        <label for="relayNumber">Relay</label>
+                        <select id="relayNumber" class="form-control">
+                            <option selected>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group col-md-2">
+                        <label for="relayPort">IO Port Number:</label>
+                        <input type="text" class="form-control" id="relayPort" />
+                    </div>
+
+                    <div class="form-group col-md-8">
+                        <label for="relayFunction">Function</label><br />
+
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="relayFunction" id="inlineRadio1" value="0"
+                                data-toggle="collapse" href="#collapseTimmer" />
+                            <label class="form-check-label" for="inlineRadio1">Timer</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="relayFunction" id="inlineRadio2" value="1"
+                                data-toggle="collapse" href="#collapseDosingPump" />
+                            <label class="form-check-label" for="inlineRadio2">Dosing Pump</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="relayFunction" id="inlineRadio3" value="2"
+                                data-toggle="collapse" href="#collapseTemperature" />
+                            <label class="form-check-label" for="inlineRadio3">Temperature</label>
+                        </div>
+                    </div>
+
+
+                    <div class="collapse" id="collapseTimmer">
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Start</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Stop</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Start</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Stop</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Start</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Stop</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Start</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Stop</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Start</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Stop</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="00:00">
+                        </div>
+                    </div>
+
+                    <div class="collapse" id="collapseDosingPump">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">Mililitres by day</span>
+                            </div>
+                            <input type="text" class="form-control" placeholder="200 ml">
+                        </div>
+                    </div>
+
+                    <div class="collapse" id="collapseTemperature">
+                        <div class="form-group col-md-8">
+                            <label for="relayFunction">Temperature relay mode</label><br />
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="relayTemperatureMode" id="inlineRadio1"
+                                    value="0" />
+                                <label class="form-check-label" for="inlineRadio1">Enable when temperature is low</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="relayTemperatureMode" id="inlineRadio2"
+                                    value="1" />
+                                <label class="form-check-label" for="inlineRadio2">Enable when temperature is high</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+
+
+
+
+    </div>
+    <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <br />
+        gabrielfc@gmail.com
+    </div>
+    </div>
+    </form>
+    </div>
+    <br />
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
